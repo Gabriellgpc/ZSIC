@@ -30,13 +30,20 @@ class ZeroShotImageClassification():
                 ar, bg, ca, cs, da, de, el, es, et, fa, fi, fr, fr-ca, gl, gu, he, hi, hr, hu, 
                 hy, id, it, ja, ka, ko, ku, lt, lv, mk, mn, mr, ms, my, nb, nl, pl, pt, pt, pt-br, 
                 ro, ru, sk, sl, sq, sr, sv, th, tr, uk, ur, vi, zh-cn, zh-tw.   
+              download_root: str
+                path to download the model files; by default, it uses "~/.cache/clip"
          """
     
          if "lang" in kwargs:
             self.lang = kwargs["lang"]
          else:
             self.lang = "en"
-
+         
+         if "download_root" in kwargs:
+             self.download_root = kwargs["download_root"]
+         else:
+             self.download_root = "~/.cache/clip"
+        
          lang_codes = self.available_languages()
 
          if self.lang not in lang_codes:
@@ -50,7 +57,7 @@ class ZeroShotImageClassification():
             if "model" in kwargs:
                 model_tag = kwargs["model"] 
             print("Loading OpenAI CLIP model {} ...".format(model_tag))    
-            self.model, self.preprocess = clip.load(model_tag, device=device) 
+            self.model, self.preprocess = clip.load(model_tag, device=device, download_root = self.download_root)
             print("Label language {} ...".format(self.lang))
          else:          
             model_tag = "clip-ViT-B-32"
